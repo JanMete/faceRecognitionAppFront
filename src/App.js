@@ -62,7 +62,6 @@ class App extends Component {
   onInputChange = (event) => {
     this.setState({ input: event.target.value });
   };
-
   onButtonSubmit = () => {
     this.setState({ imageUrl: this.state.input });
     fetch('https://face-recognition-server-3wwr.onrender.com/imageurl', {
@@ -73,8 +72,8 @@ class App extends Component {
       }),
     })
       .then((response) => response.json())
-      .then((resp) => {
-        if (resp) {
+      .then((response) => {
+        if (response) {
           fetch('https://face-recognition-server-3wwr.onrender.com/image', {
             method: 'put',
             headers: { 'Content-Type': 'application/json' },
@@ -82,13 +81,13 @@ class App extends Component {
               id: this.state.user.id,
             }),
           })
-            .then((resp) => resp.json())
+            .then((response) => response.json())
             .then((count) => {
               this.setState(Object.assign(this.state.user, { entries: count }));
             })
-            .catch((err) => console.log(err));
+            .catch(console.log);
         }
-        this.displayFaceBox(this.calculateFaceLocation(resp));
+        this.displayFaceBox(this.calculateFaceLocation(response));
       })
       .catch((err) => console.log(err));
   };
