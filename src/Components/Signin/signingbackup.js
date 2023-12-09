@@ -6,7 +6,6 @@ class Signin extends React.Component {
     this.state = {
       signInEmail: '',
       signInPassword: '',
-      errorMessage: '',
     };
   }
 
@@ -19,8 +18,6 @@ class Signin extends React.Component {
   };
 
   onSubmitSignIn = () => {
-    this.setState({ errorMessage: '' });
-
     fetch('https://face-recognition-server-3wwr.onrender.com/signin', {
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
@@ -34,21 +31,7 @@ class Signin extends React.Component {
         if (user.id) {
           this.props.loadUser(user);
           this.props.onRouteChange('home');
-        } else {
-          this.setState({ errorMessage: 'Incorrect email or password' });
-          setTimeout(() => {
-            this.setState({ errorMessage: '' });
-          }, 2000);
         }
-      })
-      .catch((error) => {
-        console.error('Error during sign in:', error);
-        this.setState({
-          errorMessage: 'Unable to sign in. Please try again later.',
-        });
-        setTimeout(() => {
-          this.setState({ errorMessage: '' });
-        }, 2000);
       });
   };
 
@@ -60,8 +43,6 @@ class Signin extends React.Component {
 
   render() {
     const { onRouteChange } = this.props;
-    const { errorMessage } = this.state;
-
     return (
       <article className='animate__animated animate__fadeIn br3 ba b--black-10 mv4 w-100 w-50-m w-25-l mw6 shadow-5 center'>
         <main className='pa4 black-80'>
@@ -111,12 +92,10 @@ class Signin extends React.Component {
                 Register
               </p>
             </div>
-            {errorMessage && <p className='f7 b red mt3 '>{errorMessage}</p>}
           </div>
         </main>
       </article>
     );
   }
 }
-
 export default Signin;
